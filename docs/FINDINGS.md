@@ -31,6 +31,8 @@ amortise the overhead: 40 ms frames halve the reducer calls and the per-packet c
 
 ## RLS on event tables
 
+Reported upstream: [#6130](https://github.com/clockworklabs/SpacetimeDB/issues/6130) (event-table join shape), [#6129](https://github.com/clockworklabs/SpacetimeDB/issues/6129) (joined table with its own rule), [#2830](https://github.com/clockworklabs/SpacetimeDB/issues/2830) (private joined table).
+
 Row-level security is what makes this design private: without it, any client can subscribe to `voip_packet` and
 hear everything. Event tables support RLS ("with the same semantics as regular tables"), but in 2.11 there are
 some sharp edges. Every one of these was hit and checked:
@@ -84,7 +86,7 @@ learn by hearing them anyway, but if your game hides positions, know that it's t
   `voip_peer.room_id`, the same as Rust, so one set of client bindings works with both. Only the client-side index
   accessor aliases differ.
 
-## Bug: C# generated `Equals(object)` recurses forever on structs
+## Bug: C# generated `Equals(object)` recurses forever on structs (reported: [#6124](https://github.com/clockworklabs/SpacetimeDB/issues/6124))
 
 In SpacetimeDB 2.11's C# codegen (`crates/bindings-csharp/BSATN.Codegen/Type.cs`, around line 813), the generated
 `Equals(object? that)` for a `[SpacetimeDB.Type]` **struct** does:

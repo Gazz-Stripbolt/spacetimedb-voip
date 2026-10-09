@@ -173,9 +173,7 @@ Built by **Tinker** ([@Gazz-Stripbolt](https://github.com/Gazz-Stripbolt)), the 
 [SpaceChatDB](https://github.com/Lethalchip/SpaceChatDB), an earlier PCM-over-event-tables call app, and out of
 other SpacetimeDB developers proving that Opus over event tables with interest management works in real games.
 
-Also from this workshop: [spacetimedb-idc](https://github.com/Gazz-Stripbolt/spacetimedb-idc) (databases that push
-messages to each other) and [spacetimedb-http-site](https://github.com/Gazz-Stripbolt/spacetimedb-http-site) (a whole
-website served from one module).
+More SpacetimeDB building blocks from this workshop: **[github.com/Gazz-Stripbolt](https://github.com/Gazz-Stripbolt)**.
 
 🚀 **New to SpacetimeDB?** If you sign up through **[this referral link](https://spacetimedb.com/?referral=Lethalchip)**,
 Pogly gets free recurring energy. Thank you!

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-flavor="flat">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spacetime VoIP</title>
+<style>
+:root {
+  --bg: #f6f5f2; --panel: #ffffff; --panel2: #efede8; --fg: #1d1c1a; --muted: #6b6862; --line: #dedad2;
+  --accent: #e8730c; --accent-fg: #ffffff; --talk: #1f9d55; --warn: #c2410c; --grid: #e6e2da; --dot: #8a857c;
+  --range: rgba(232, 115, 12, 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121316; --panel: #1b1d21; --panel2: #23262b; --fg: #ecebe8; --muted: #9a978f; --line: #2d3036;
+    --accent: #ff8a2a; --accent-fg: #1b1206; --talk: #3ddc84; --warn: #ff9a5c; --grid: #24272c; --dot: #8d8a83;
+    --range: rgba(255, 138, 42, 0.10);
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+button, input, select { font: inherit; color: inherit; }
+header { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--line); background: var(--panel); }
+header h1 { font-size: 17px; margin: 0; font-weight: 650; letter-spacing: -0.01em; }
+#status { font-size: 13px; color: var(--talk); }
+#status.bad { color: var(--warn); }
+#my-name { margin-left: auto; background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 53px); }
+aside { border-right: 1px solid var(--line); padding: 16px 12px; background: var(--panel); display: flex; flex-direction: column; gap: 6px; }
+aside h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 4px 8px 6px; }
+.room { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 8px; border: 0; background: transparent; cursor: pointer; text-align: left; }
+.room:hover { background: var(--panel2); }
+.room.active { background: var(--panel2); font-weight: 600; }
+.room-icon { display: grid; place-items: center; color: var(--muted); width: 18px; }
+.room.active .room-icon { color: var(--accent); }
+.room-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.count { font-size: 12px; color: var(--muted); }
+.room-members { padding: 0 0 6px 34px; display: flex; flex-direction: column; gap: 2px; }
+.mini { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.mini .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot); }
+.mini.talking { color: var(--fg); }
+.mini.talking .dot { background: var(--talk); box-shadow: 0 0 0 3px color-mix(in srgb, var(--talk) 30%, transparent); }
+#new-room { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 10px 8px 0; border-top: 1px solid var(--line); }
+#new-room input[type=text] { padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); }
+#new-room label { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+main { padding: 24px 28px 120px; min-width: 0; }
+#room-title { margin: 0; font-size: 24px; letter-spacing: -0.02em; }
+#room-sub { margin: 4px 0 18px; color: var(--muted); }
+.title-row { display: flex; align-items: flex-start; gap: 12px; }
+.title-row div { flex: 1; }
+#members { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.avatar { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--panel2); font-weight: 650; outline: 3px solid transparent; outline-offset: 2px; transition: outline-color 0.08s; }
+.card.talking .avatar { outline-color: var(--talk); }
+.card.me .avatar { background: var(--accent); color: var(--accent-fg); }
+.card-name { font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; max-width: 100%; white-space: nowrap; }
+.card input[type=range] { width: 100%; accent-color: var(--accent); }
+.tags { display: flex; gap: 4px; min-height: 20px; flex-wrap: wrap; justify-content: center; }
+.tag { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--panel2); color: var(--muted); }
+.tag.warn { color: var(--warn); }
+#map-wrap { margin-top: 20px; max-width: 520px; }
+#map { width: 100%; aspect-ratio: 1; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; cursor: crosshair; touch-action: none; display: block; }
+.hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
+button.btn, .small { border: 1px solid var(--line); background: var(--panel); padding: 8px 14px; border-radius: 999px; cursor: pointer; }
+.small { padding: 3px 10px; font-size: 12px; }
+button.btn.on { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+footer { position: fixed; left: 260px; right: 0; bottom: 0; background: var(--panel); border-top: 1px solid var(--line); padding: 12px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+#me-ring { width: 12px; height: 12px; border-radius: 50%; background: var(--dot); }
+#me-ring.on { background: var(--talk); box-shadow: 0 0 0 4px color-mix(in srgb, var(--talk) 30%, transparent); }
+.meter { position: relative; width: 160px; height: 8px; background: var(--panel2); border-radius: 4px; overflow: hidden; }
+#meter-fill { height: 100%; width: 0; background: var(--talk); transition: width 0.05s linear; }
+#gate-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--fg); left: 37.5%; }
+.gate { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.gate input { width: 110px; accent-color: var(--accent); }
+select { padding: 7px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); }
+#stats { flex-basis: 100%; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+#toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%) translateY(-8px); background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; opacity: 0; pointer-events: none; transition: 0.15s; }
+#toast.show { opacity: 1; transform: translateX(-50%); }
+[hidden] { display: none !important; }
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  aside { border-right: 0; border-bottom: 1px solid var(--line); }
+  footer { left: 0; }
+  main { padding: 18px 16px 170px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;color:var(--accent)"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg> Spacetime VoIP</h1>
+  <span id="status">connecting…</span>
+  <button id="my-name" title="Change your name">…</button>
+</header>
+<div class="layout">
+  <aside>
+    <h2>Voice rooms</h2>
+    <div id="rooms"></div>
+    <form id="new-room">
+      <input id="new-name" type="text" placeholder="New room name" maxlength="32" required>
+      <label><input id="new-spatial" type="checkbox"> Proximity voice</label>
+      <button class="btn" type="submit">Create &amp; join</button>
+    </form>
+  </aside>
+  <main>
+    <div class="title-row">
+      <div><h2 id="room-title">Pick a room</h2><p id="room-sub"></p></div>
+      <button class="btn" id="leave" hidden>Leave</button>
+    </div>
+    <div id="members"></div>
+    <div id="map-wrap" hidden>
+      <canvas id="map"></canvas>
+      <div class="hint">Voices fade out with distance and pan left/right. Headphones recommended.</div>
+    </div>
+  </main>
+</div>
+<footer>
+  <span id="me-ring" title="Sending"></span>
+  <button class="btn primary" id="mic">Turn mic on</button>
+  <button class="btn" id="mute">Mute</button>
+  <button class="btn" id="deafen">Deafen</button>
+  <select id="mode" title="Input mode">
+    <option value="voice">Voice activity</option>
+    <option value="ptt">Push to talk</option>
+  </select>
+  <span class="hint" id="ptt-hint" hidden>Hold Space to talk</span>
+  <span class="gate">Sensitivity
+    <span class="meter"><span id="meter-fill" style="display:block"></span><span id="gate-mark"></span></span>
+    <input id="gate" type="range" min="-80" max="0" step="1" value="-50" title="Noise gate threshold">
+  </span>
+  <div id="stats"></div>
+</footer>
+<div id="toast"></div>
+<script type="module">/*BUNDLE*/</script>
+</body>
+</html>

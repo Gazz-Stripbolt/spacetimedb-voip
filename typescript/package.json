@@ -1,0 +1,16 @@
+{
+  "name": "spacetimedb-voip",
+  "version": "0.1.0",
+  "description": "Voice chat for SpacetimeDB, as a submodule: rooms, proximity voice, RLS-targeted delivery over an event table. Same schema and clients as voip.rs / Voip.cs.",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "files": ["src"],
+  "keywords": ["spacetimedb", "submodule", "voip", "voice-chat", "opus"],
+  "repository": { "type": "git", "url": "https://github.com/Gazz-Stripbolt/spacetimedb-voip", "directory": "typescript" },
+  "peerDependencies": {
+    "spacetimedb": "2.11.*"
+  }
+}

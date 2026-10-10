@@ -29,6 +29,14 @@ audio device latency.
 ~123 B on the wire, roughly 2× the payload, which works out to ~6 KB/s per listener per active speaker. Longer frames
 amortise the overhead: 40 ms frames halve the reducer calls and the per-packet cost, for 20 ms more latency.
 
+**Snapshots don't disturb voice.** SpacetimeDB snapshots a database every 1,000,000 transactions, holding a write lock
+on its committed state while it writes the table pages. Packets never become table state here, so the snapshot is tiny.
+On an on-disk server, after pushing the demo database to 2M transactions with [`tests/fill.mts`](../tests/fill.mts),
+the 10 → 30 load ran straight across the second snapshot: the lock was held ~1.3 ms (24 ms with fsync), and the
+100 ms around it looked like any other (max 34 ms, against normal spikes up to 56 ms). `TIMELINE=out.csv` on the
+bench writes per-frame arrival times to line up with the server log. Modules that keep a lot of table state will see
+longer pauses: on the same VM it was ~135 ms at 100 MB of rows, ~0.5 s at 400 MB and 1.4-2.3 s at 1 GB.
+
 ## RLS on event tables
 
 Reported upstream: [#6130](https://github.com/clockworklabs/SpacetimeDB/issues/6130) (event-table join shape), [#6129](https://github.com/clockworklabs/SpacetimeDB/issues/6129) (joined table with its own rule), [#2830](https://github.com/clockworklabs/SpacetimeDB/issues/2830) (private joined table).

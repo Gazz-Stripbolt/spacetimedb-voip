@@ -2,6 +2,9 @@
 // (60 bytes, roughly 24 kbit/s Opus) every 20 ms. Reports delivery, latency, and wire bytes.
 //
 //   DB=voip-rust SPEAKERS=10 LISTENERS=20 SECS=10 npx tsx tests/bench.mts
+// TIMELINE=out.csv also writes one `arrival_epoch_ms,latency_ms` line per delivered frame (e.g. to line up with a
+// snapshot in the server log).
+import { writeFileSync } from 'node:fs';
 import { connect, type Flavor, type Voice } from '../demo/web/src/api.ts';
 
 const HOST = process.env.HOST ?? 'ws://127.0.0.1:3000';
@@ -10,6 +13,7 @@ const FLAVOR = (process.env.FLAVOR ?? 'flat') as Flavor;
 const SPEAKERS = Number(process.env.SPEAKERS ?? 10);
 const LISTENERS = Number(process.env.LISTENERS ?? 20);
 const SECS = Number(process.env.SECS ?? 10);
+const TIMELINE = process.env.TIMELINE;
 const FRAME = 60;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -27,6 +31,7 @@ globalThis.WebSocket = class extends Native {
 } as typeof WebSocket;
 
 const lat: number[] = [];
+const timeline: string[] = [];
 let delivered = 0;
 async function client(listen: boolean): Promise<{ v: Voice; id: number }> {
   const v = await connect(FLAVOR, HOST, DB);
@@ -38,7 +43,9 @@ async function client(listen: boolean): Promise<{ v: Voice; id: number }> {
     v.packet.onInsert((_c, p) => {
       delivered++;
       const sent = new DataView(p.data.buffer, p.data.byteOffset, 8).getFloat64(0);
-      lat.push(performance.timeOrigin + performance.now() - sent);
+      const now = performance.timeOrigin + performance.now();
+      lat.push(now - sent);
+      if (TIMELINE) timeline.push(`${now.toFixed(1)},${(now - sent).toFixed(2)}`);
     });
     await new Promise<void>((res) =>
       v.conn.subscriptionBuilder().onApplied(() => res()).subscribe([`SELECT * FROM ${v.sql.packet} WHERE speaker != ${id}`])
@@ -54,6 +61,7 @@ for (const c of [...speakers, ...listeners]) await c.v.join(lobby);
 await sleep(500);
 delivered = 0;
 lat.length = 0;
+timeline.length = 0;
 const wireStart = wireIn;
 
 let sent = 0;
@@ -82,5 +90,6 @@ console.log(`  reducer calls  ${(sent / secs).toFixed(0)}/s, rejected ${rejected
 console.log(`  delivered      ${delivered}/${expected} (${((100 * delivered) / Math.max(1, expected)).toFixed(1)}%)`);
 console.log(`  latency        p50 ${p(0.5)} ms, p95 ${p(0.95)} ms, p99 ${p(0.99)} ms, max ${p(1)} ms`);
 console.log(`  wire, per listener  ${((wireIn - wireStart) / LISTENERS / secs / 1024).toFixed(1)} KB/s, ${((wireIn - wireStart) / Math.max(1, delivered)).toFixed(0)} B per delivered ${FRAME} B frame`);
+if (TIMELINE) writeFileSync(TIMELINE, timeline.join('\n') + '\n');
 for (const c of [...speakers, ...listeners]) c.v.conn.disconnect();
 process.exit(0);

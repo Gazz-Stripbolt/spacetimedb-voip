@@ -14,7 +14,7 @@
  * await voip.start();   // from a click: browsers only allow audio after a user gesture
  * ```
  */
-import { workletUrl } from './worklets';
+import { workletUrl } from './worklets.js';
 
 export const VOIP_FLAG_END = 1;
 

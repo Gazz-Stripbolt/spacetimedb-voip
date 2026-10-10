@@ -1,1 +1,50 @@
-{"name":"spacetimedb-voip-client","version":"0.1.0","type":"module","main":"src/index.ts","types":"src/index.ts"}
+{
+  "name": "@pogly/spacetimedb-voip-client",
+  "version": "0.1.0",
+  "description": "Browser voice client for spacetimedb-voip: mic \u2192 noise gate / push-to-talk \u2192 Opus (WebCodecs) \u2192 reducer, and per-speaker decoders with adaptive jitter buffers and 3D panning.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "spacetimedb",
+    "voip",
+    "voice-chat",
+    "opus",
+    "webcodecs",
+    "audioworklet"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gazz-Stripbolt/spacetimedb-voip.git",
+    "directory": "client"
+  },
+  "homepage": "https://github.com/Gazz-Stripbolt/spacetimedb-voip/tree/main/client#readme",
+  "bugs": {
+    "url": "https://github.com/Gazz-Stripbolt/spacetimedb-voip/issues"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

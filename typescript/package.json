@@ -1,16 +1,54 @@
 {
-  "name": "spacetimedb-voip",
+  "name": "@pogly/spacetimedb-voip",
   "version": "0.1.0",
   "description": "Voice chat for SpacetimeDB, as a submodule: rooms, proximity voice, RLS-targeted delivery over an event table. Same schema and clients as voip.rs / Voip.cs.",
   "license": "MIT",
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "exports": { ".": "./src/index.ts" },
-  "files": ["src"],
-  "keywords": ["spacetimedb", "submodule", "voip", "voice-chat", "opus"],
-  "repository": { "type": "git", "url": "https://github.com/Gazz-Stripbolt/spacetimedb-voip", "directory": "typescript" },
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "spacetimedb",
+    "submodule",
+    "voip",
+    "voice-chat",
+    "opus"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gazz-Stripbolt/spacetimedb-voip.git",
+    "directory": "typescript"
+  },
+  "homepage": "https://github.com/Gazz-Stripbolt/spacetimedb-voip/tree/main/typescript#readme",
+  "bugs": {
+    "url": "https://github.com/Gazz-Stripbolt/spacetimedb-voip/issues"
+  },
   "peerDependencies": {
     "spacetimedb": "2.11.*"
+  },
+  "devDependencies": {
+    "spacetimedb": "2.11.*",
+    "typescript": "^5.9.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

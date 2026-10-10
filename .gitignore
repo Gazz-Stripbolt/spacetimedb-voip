@@ -9,3 +9,5 @@ spike/
 demo/typescript/src/page.gen.ts
 server.log
 demo/typescript/dist/
+client/dist/
+/typescript/dist/

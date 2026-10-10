@@ -8,15 +8,21 @@ Protocol: [`docs/PROTOCOL.md`](../docs/PROTOCOL.md)
 
 ## Install
 
-It isn't on npm yet. Copy this folder into your repo and add it as an npm workspace package, so there's only one
-copy of the `spacetimedb` package (two copies make `spacetime publish` fail with *"Local module schema inspection
-failed"*):
+```bash
+npm install @pogly/spacetimedb-voip spacetimedb
+```
+
+Use `spacetimedb` 2.11.x, and keep only one copy of it in your module's dependency tree. With two copies,
+`spacetime publish` fails with *"Local module schema inspection failed"*. The package ships compiled JavaScript plus
+its TypeScript source, which is where the types come from.
+
+To work on it from a clone instead, add this folder to your npm workspaces next to your module:
 
 ```jsonc
 // package.json at your repo root
-{ "private": true, "workspaces": ["spacetimedb-voip", "my-module"] }
+{ "private": true, "workspaces": ["spacetimedb-voip/typescript", "my-module"] }
 // my-module/package.json
-{ "dependencies": { "spacetimedb": "2.11.*", "spacetimedb-voip": "0.1.0" } }
+{ "dependencies": { "spacetimedb": "2.11.*", "@pogly/spacetimedb-voip": "0.1.0" } }
 ```
 
 ## Wire it up
@@ -25,7 +31,7 @@ Submodules can't declare row-level-security filters or lifecycle reducers, so yo
 
 ```typescript
 import { schema } from 'spacetimedb/server';
-import * as voip from 'spacetimedb-voip';                // `import * as`, not a default import
+import * as voip from '@pogly/spacetimedb-voip';                // `import * as`, not a default import
 
 const spacetimedb = schema({ /* your tables */, voip });  // mounted under the namespace "voip"
 export default spacetimedb;

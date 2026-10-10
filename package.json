@@ -8,7 +8,7 @@
     "demo/typescript"
   ],
   "scripts": {
-    "build:web": "node demo/web/build.mjs",
+    "build:web": "npm run build -w client --silent && node demo/web/build.mjs",
     "typecheck": "tsc -p client && tsc -p demo/web && tsc --noEmit -p typescript && tsc --noEmit -p demo/typescript",
     "test:server": "tsx tests/server.test.mts",
     "test:browser": "tsx tests/browser.test.mts",

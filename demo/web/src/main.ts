@@ -1,6 +1,6 @@
 // Demo web client: voice rooms plus a proximity "campfire" map.
 // Served by the demo module at /route/, or open dist/index.html with ?host=ws://...&db=...
-import { VoipClient, voipPacketQuery } from 'spacetimedb-voip-client';
+import { VoipClient, voipPacketQuery } from '@pogly/spacetimedb-voip-client';
 import type { Identity } from 'spacetimedb';
 import { connect, type Flavor, type Voice } from './api';
 

@@ -5,7 +5,7 @@ The browser side: mic → noise gate / push-to-talk → Opus (WebCodecs) → you
 and distance fade for proximity rooms. It doesn't depend on your generated bindings, and it has no dependencies.
 
 ```ts
-import { VoipClient, voipPacketQuery } from 'spacetimedb-voip-client';
+import { VoipClient, voipPacketQuery } from '@pogly/spacetimedb-voip-client';
 
 const voip = new VoipClient({
   send: (seq, flags, data) => conn.reducers.voipSend({ seq, flags, data }),
@@ -28,5 +28,8 @@ voip.setSpatial({ range: room.range });
 voip.setListener({ x, y, z });
 ```
 
-It needs WebCodecs Opus (`AudioEncoder`/`AudioDecoder`) and AudioWorklet. It's tested in Chromium. Not on npm yet:
-copy `src/` or add this folder as a workspace package.
+It needs WebCodecs Opus (`AudioEncoder`/`AudioDecoder`) and AudioWorklet. It's tested in Chromium.
+
+```bash
+npm install @pogly/spacetimedb-voip-client
+```

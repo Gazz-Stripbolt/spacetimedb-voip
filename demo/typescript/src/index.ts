@@ -4,7 +4,7 @@
  */
 import { schema, table, t, Router, SyncResponse, SenderError, type ReducerCtx } from 'spacetimedb/server';
 import type { Identity } from 'spacetimedb';
-import * as voip from 'spacetimedb-voip';
+import * as voip from '@pogly/spacetimedb-voip';
 import PAGE from './page.gen';
 
 /** The campfire map is 0..MAP x 0..MAP. */

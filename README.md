@@ -114,7 +114,7 @@ voip::set_position(ctx, ctx.sender(), voip::VoipVec3 { x, y, z });
 Then in the browser:
 
 ```ts
-import { VoipClient, voipPacketQuery } from 'spacetimedb-voip-client';
+import { VoipClient, voipPacketQuery } from '@pogly/spacetimedb-voip-client';
 
 const voip = new VoipClient({ send: (seq, flags, data) => conn.reducers.voipSend({ seq, flags, data }) });
 conn.db.voipPacket.onInsert((_ctx, p) => voip.receive(p));

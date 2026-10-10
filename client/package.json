@@ -1,7 +1,7 @@
 {
   "name": "@pogly/spacetimedb-voip-client",
-  "version": "0.1.0",
-  "description": "Browser voice client for spacetimedb-voip: mic \u2192 noise gate / push-to-talk \u2192 Opus (WebCodecs) \u2192 reducer, and per-speaker decoders with adaptive jitter buffers and 3D panning.",
+  "version": "0.1.1",
+  "description": "Browser voice client for spacetimedb-voip: mic → noise gate / push-to-talk → Opus (WebCodecs) → reducer, and per-speaker decoders with adaptive jitter buffers and 3D panning.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

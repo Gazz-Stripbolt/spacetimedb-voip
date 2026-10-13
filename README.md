@@ -10,7 +10,7 @@ it. It's available for **Rust**, **C#** and **TypeScript (as a submodule)**, all
 works with all three.
 
 [![CI](https://github.com/Gazz-Stripbolt/spacetimedb-voip/actions/workflows/ci.yml/badge.svg)](https://github.com/Gazz-Stripbolt/spacetimedb-voip/actions/workflows/ci.yml)
-![SpacetimeDB 2.11](https://img.shields.io/badge/SpacetimeDB-2.11-e8730c)
+![SpacetimeDB 2.12](https://img.shields.io/badge/SpacetimeDB-2.12-e8730c)
 ![TypeScript submodule](https://img.shields.io/badge/TypeScript-submodule-3178c6)
 [![npm](https://img.shields.io/npm/v/@pogly/spacetimedb-voip?label=npm%20%40pogly%2Fspacetimedb-voip&color=cb3837)](https://www.npmjs.com/package/@pogly/spacetimedb-voip)
 ![Rust](https://img.shields.io/badge/Rust-drop--in-b7410e)
@@ -92,7 +92,7 @@ sequenceDiagram
 ## Quick start (Rust)
 
 ```rust
-// src/lib.rs (Cargo.toml: spacetimedb = { version = "2.11.*", features = ["unstable"] })
+// src/lib.rs (Cargo.toml: spacetimedb = { version = "2.12.*", features = ["unstable"] })
 pub mod voip;   // copy rust/voip.rs to src/voip.rs
 
 #[spacetimedb::reducer(init)]

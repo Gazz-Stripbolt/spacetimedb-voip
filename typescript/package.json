@@ -1,6 +1,6 @@
 {
   "name": "@pogly/spacetimedb-voip",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Voice chat for SpacetimeDB, as a submodule: rooms, proximity voice, RLS-targeted delivery over an event table. Same schema and clients as voip.rs / Voip.cs.",
   "license": "MIT",
   "type": "module",
@@ -41,10 +41,10 @@
     "url": "https://github.com/Gazz-Stripbolt/spacetimedb-voip/issues"
   },
   "peerDependencies": {
-    "spacetimedb": "2.11.*"
+    "spacetimedb": "2.11.* || 2.12.*"
   },
   "devDependencies": {
-    "spacetimedb": "2.11.*",
+    "spacetimedb": "2.12.*",
     "typescript": "^5.9.0"
   },
   "publishConfig": {

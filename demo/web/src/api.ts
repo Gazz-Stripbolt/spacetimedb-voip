@@ -53,20 +53,27 @@ export function connect(
   });
 }
 
+/**
+ * Look up a submodule accessor such as `voip.room`. SDK 2.11 keys them flat (`db['voip.room']`);
+ * 2.12 nests them (`db.voip.room`). Path segments are tried as written, then camelCased.
+ */
+const at = (o: any, path: string): any =>
+  o[path] ?? path.split('.').reduce((x, k) => x?.[k] ?? x?.[k.replace(/_([a-z])/g, (_m, c) => c.toUpperCase())], o);
+
 function wrap(flavor: Flavor, conn: Conn, identity: Identity, token: string): Voice {
   const ns = flavor === 'ns';
   const d = conn.db as any;
   const r = conn.reducers as any;
-  const red = (flat: string, nsName: string) => r[ns ? nsName : flat];
+  const red = (flat: string, nsName: string) => (ns ? at(r, nsName) : r[flat]);
   return {
     flavor,
     conn,
     identity,
     token,
-    room: ns ? d['voip.room'] : d.voipRoom,
-    peer: ns ? d['voip.peer'] : d.voipPeer,
-    packet: ns ? d['voip.packet'] : d.voipPacket,
-    listen: ns ? d['voip.listen'] : d.voipListen,
+    room: ns ? at(d, 'voip.room') : d.voipRoom,
+    peer: ns ? at(d, 'voip.peer') : d.voipPeer,
+    packet: ns ? at(d, 'voip.packet') : d.voipPacket,
+    listen: ns ? at(d, 'voip.listen') : d.voipListen,
     player: d.demoPlayer,
     sql: ns
       ? { room: 'voip.room', peer: 'voip.peer', packet: 'voip.packet', listen: 'voip.listen', player: 'demo_player' }

@@ -40,6 +40,9 @@
   "bugs": {
     "url": "https://github.com/Gazz-Stripbolt/spacetimedb-voip/issues"
   },
+  "submodule": {
+    "category": "messaging"
+  },
   "peerDependencies": {
     "spacetimedb": "2.11.* || 2.12.*"
   },

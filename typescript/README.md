@@ -1,6 +1,6 @@
 # spacetimedb-voip for TypeScript (submodule)
 
-Voice chat as a **SpacetimeDB submodule**. Mount it, and your module gets rooms, proximity voice and private
+Voice chat as a **Spacetime submodule**. Mount it, and your module gets rooms, proximity voice and private
 packet delivery.
 
 Source: [`src/index.ts`](src/index.ts) · Complete example: [`demo/typescript`](../demo/typescript/src/index.ts) ·

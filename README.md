@@ -2,15 +2,15 @@
 
 # 🔧 Spacetime VoIP
 
-**Voice chat for SpacetimeDB, with no media server.**
+**Voice chat for Spacetime, with no media server.**
 
-Rooms and proximity voice that run entirely inside your SpacetimeDB module. Clients encode Opus, the module routes
+Rooms and proximity voice that run entirely inside your Spacetime module. Clients encode Opus, the module routes
 packets through an **event table**, and **row-level security** delivers each packet only to the people who should hear
 it. It's available for **Rust**, **C#** and **TypeScript (as a submodule)**, all with the same schema, so one client
 works with all three.
 
 [![CI](https://github.com/Gazz-Stripbolt/spacetimedb-voip/actions/workflows/ci.yml/badge.svg)](https://github.com/Gazz-Stripbolt/spacetimedb-voip/actions/workflows/ci.yml)
-![SpacetimeDB 2.12](https://img.shields.io/badge/SpacetimeDB-2.12-e8730c)
+![Spacetime 2.12](https://img.shields.io/badge/Spacetime-2.12-e8730c)
 ![TypeScript submodule](https://img.shields.io/badge/TypeScript-submodule-3178c6)
 [![npm](https://img.shields.io/npm/v/@pogly/spacetimedb-voip?label=npm%20%40pogly%2Fspacetimedb-voip&color=cb3837)](https://www.npmjs.com/package/@pogly/spacetimedb-voip)
 ![Rust](https://img.shields.io/badge/Rust-drop--in-b7410e)
@@ -36,7 +36,7 @@ works with all three.
 | **The browser client**: mic → Opus → module → speakers | [`client/`](client): `VoipClient` (WebCodecs + AudioWorklet) |
 | **See it working**: voice rooms and a proximity campfire | [`demo/`](demo): one demo per language, sharing one web page |
 | **The wire format**, to write a client for Unity, Godot or anything else | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) |
-| **Everything we learned**: numbers, limits, SpacetimeDB quirks | [`docs/FINDINGS.md`](docs/FINDINGS.md) |
+| **Everything we learned**: numbers, limits, Spacetime quirks | [`docs/FINDINGS.md`](docs/FINDINGS.md) |
 
 CI runs the same protocol and audio test suites against every language:
 
@@ -140,7 +140,7 @@ Measured locally (2-vCPU VM, clients on the same machine). The details are in [F
 
 ## Good to know
 
-- **Row-level security is experimental** in SpacetimeDB (Rust needs the `unstable` feature, C# needs
+- **Row-level security is experimental** in Spacetime (Rust needs the `unstable` feature, C# needs
   `#pragma warning disable STDB_UNSTABLE`). This design needs it: without RLS there's no way to stop a client
   subscribing to everyone's audio. RLS on event tables has sharp edges in 2.11. They're all handled here, and
   written up in [FINDINGS](docs/FINDINGS.md).
@@ -170,13 +170,13 @@ docs/                  PROTOCOL.md · FINDINGS.md · screenshots
 ## Credits
 
 Built by **Tinker** ([@Gazz-Stripbolt](https://github.com/Gazz-Stripbolt)), the resident gadgeteer for the
-[Pogly](https://pogly.gg) team: collaborative stream overlays, powered by SpacetimeDB. It grew out of
+[Pogly](https://pogly.gg) team: collaborative stream overlays, powered by Spacetime. It grew out of
 [SpaceChatDB](https://github.com/Lethalchip/SpaceChatDB), an earlier PCM-over-event-tables call app, and out of
-other SpacetimeDB developers proving that Opus over event tables with interest management works in real games.
+other Spacetime developers proving that Opus over event tables with interest management works in real games.
 
-More SpacetimeDB building blocks from this workshop: **[github.com/Gazz-Stripbolt](https://github.com/Gazz-Stripbolt)**.
+More Spacetime building blocks from this workshop: **[github.com/Gazz-Stripbolt](https://github.com/Gazz-Stripbolt)**.
 
-🚀 **New to SpacetimeDB?** If you sign up through **[this referral link](https://spacetimedb.com/?referral=Lethalchip)**,
+🚀 **New to Spacetime?** If you sign up through **[this referral link](https://spacetimedb.com/?referral=Lethalchip)**,
 Pogly gets free recurring energy. Thank you!
 
 ## License

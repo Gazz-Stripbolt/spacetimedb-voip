@@ -124,7 +124,7 @@ mean rejected packets (rate limit) or a new spurt.
 
 ### Writing a native client (Unity, Godot, …)
 
-1. Connect with the SpacetimeDB SDK for your engine and generate bindings from the module.
+1. Connect with the Spacetime SDK for your engine and generate bindings from the module.
 2. Subscribe as above. On each `voip_packet` insert, route `data` to that speaker's Opus decoder
    ([Concentus](https://github.com/lostromb/concentus) in C#), then into a per-speaker jitter buffer of ~60-100 ms
    that refills after an underrun.

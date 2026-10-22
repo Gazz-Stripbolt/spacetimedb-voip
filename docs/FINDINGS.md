@@ -1,6 +1,6 @@
 # Findings
 
-What we learned building voice chat on SpacetimeDB 2.11: the numbers, the quirks, and what we'd like upstream.
+What we learned building voice chat on Spacetime 2.11: the numbers, the quirks, and what we'd like upstream.
 
 ## Numbers
 
@@ -18,7 +18,7 @@ per speaker.
 | 25 speakers → 50 listeners, Rust | 1069 | 81%, seconds behind | | |
 
 The last row saturated the VM. The 75 clients run in one Node process on the same two cores as the server, so this
-measures the box, not SpacetimeDB's ceiling. Ten people talking at once is already a shouting match. Real rooms have one
+measures the box, not Spacetime's ceiling. Ten people talking at once is already a shouting match. Real rooms have one
 or two speakers at a time, and the cost scales with speakers × listeners.
 
 The real browser round trip (headless Chromium, fake mic, through the module, decoded and played) also measures p50
@@ -29,7 +29,7 @@ audio device latency.
 ~123 B on the wire, roughly 2× the payload, which works out to ~6 KB/s per listener per active speaker. Longer frames
 amortise the overhead: 40 ms frames halve the reducer calls and the per-packet cost, for 20 ms more latency.
 
-**Snapshots don't disturb voice.** SpacetimeDB snapshots a database every 1,000,000 transactions, holding a write lock
+**Snapshots don't disturb voice.** Spacetime snapshots a database every 1,000,000 transactions, holding a write lock
 on its committed state while it writes the table pages. Packets never become table state here, so the snapshot is tiny.
 On an on-disk server, after pushing the demo database to 2M transactions with [`tests/fill.mts`](../tests/fill.mts),
 the 10 → 30 load ran straight across the second snapshot: the lock was held ~1.3 ms (24 ms with fsync), and the
@@ -96,7 +96,7 @@ learn by hearing them anyway, but if your game hides positions, know that it's t
 
 ## Bug: C# generated `Equals(object)` recurses forever on structs (reported: [#6124](https://github.com/clockworklabs/SpacetimeDB/issues/6124))
 
-In SpacetimeDB 2.11's C# codegen (`crates/bindings-csharp/BSATN.Codegen/Type.cs`, around line 813), the generated
+In Spacetime 2.11's C# codegen (`crates/bindings-csharp/BSATN.Codegen/Type.cs`, around line 813), the generated
 `Equals(object? that)` for a `[SpacetimeDB.Type]` **struct** does:
 
 ```csharp

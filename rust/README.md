@@ -4,7 +4,7 @@ One file. Copy [`voip.rs`](voip.rs) to your module's `src/voip.rs`.
 
 ```toml
 # Cargo.toml: row-level security (how packets reach only their listeners) needs `unstable`
-spacetimedb = { version = "2.12.*", features = ["unstable"] }
+spacetimedb = { version = "2.14.*", features = ["unstable"] }
 ```
 
 ```rust
